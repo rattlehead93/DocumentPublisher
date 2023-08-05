@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `document` (
 CREATE TABLE processed_document
 (
     `id`            INT AUTO_INCREMENT PRIMARY KEY,
-    `document_id`   INT,
+    `document_id`   BIGINT,
     `unique_number` INT,
     INDEX         fk_document_id_idx (document_id),
     FOREIGN KEY (document_id) REFERENCES document (id)
