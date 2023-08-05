@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 
 @Service
 public class DocumentPublisher {
@@ -24,5 +26,11 @@ public class DocumentPublisher {
 
     public void sendMessage(final DocumentMessage documentMessage) {
         rabbitTemplate.convertAndSend(exchange, routingKey, documentMessage);
+    }
+
+    @PostConstruct
+    public void test(){
+        DocumentMessage documentMessage = new DocumentMessage(1, "abdcd");
+        sendMessage(documentMessage);
     }
 }
