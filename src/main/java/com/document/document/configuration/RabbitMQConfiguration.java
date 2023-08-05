@@ -1,5 +1,6 @@
 package com.document.document.configuration;
 
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -10,8 +11,12 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+
+import java.util.Map;
 
 @Configuration
 public class RabbitMQConfiguration {
@@ -50,5 +55,11 @@ public class RabbitMQConfiguration {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         return rabbitTemplate;
+    }
+
+    @Bean
+    public RabbitRetryTemplateCustomizer customizeRetryPolicy(@Value("${spring.rabbitmq.listener.simple.retry.max-attempts}") int maxAttempts) {
+        SimpleRetryPolicy policy = new SimpleRetryPolicy(maxAttempts, Map.of(AmqpRejectAndDontRequeueException.class, false), true, true);
+        return (target, retryTemplate) -> retryTemplate.setRetryPolicy(policy);
     }
 }

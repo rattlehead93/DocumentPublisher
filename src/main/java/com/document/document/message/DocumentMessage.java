@@ -6,14 +6,14 @@ import java.io.Serializable;
 
 public class DocumentMessage implements Serializable {
     @JsonProperty("id")
-    Integer id;
+    Long id;
 
     @JsonProperty("content")
     String content;
 
     DocumentMessage() {}
 
-    public DocumentMessage(Integer id, String content) {
+    public DocumentMessage(Long id, String content) {
         this.id = id;
         this.content = content;
     }

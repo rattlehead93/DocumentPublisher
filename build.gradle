@@ -24,10 +24,10 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-amqp:2.7.15-SNAPSHOT'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.14'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.15-SNAPSHOT'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc:2.7.14'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.7.15-SNAPSHOT'
-    implementation 'javax.validation:validation-api:2.0.1.Final'
     runtimeOnly 'com.mysql:mysql-connector-j:8.0.33'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.15-SNAPSHOT'
     testImplementation 'org.springframework.amqp:spring-rabbit-test:2.4.14'
@@ -58,4 +58,8 @@ task migrate(type: Exec) {
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
 }
