@@ -6,7 +6,6 @@ import com.document.document.repository.DocumentRepository;
 import com.document.document.repository.ProcessedDocumentRepository;
 import com.document.document.request.DocumentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,11 +22,16 @@ public class DocumentService {
         this.processedDocumentRepository = processedDocumentRepository;
     }
 
-    public Document saveDocument(final Document document) {
+    private Document saveDocument(final Document document) {
         return documentRepository.save(document);
     }
 
-    public Document createDocumentFromRequest(final DocumentRequest documentRequest) {
+    public Document saveDocument(final DocumentRequest documentRequest) {
+        final Document document = createDocumentFromRequest(documentRequest);
+        return saveDocument(document);
+    }
+
+    private Document createDocumentFromRequest(final DocumentRequest documentRequest) {
         final Document document = new Document();
         document.setFileContent(documentRequest.getFileContent());
         document.setExtension(documentRequest.getExtension());
@@ -36,7 +40,7 @@ public class DocumentService {
     }
 
     public Integer getUniqueSubStringCount(final Long documentId) {
-        final Document document = documentRepository.findById(documentId)
+        documentRepository.findById(documentId)
                 .orElseThrow(()-> new EntityNotFoundException("No document found with id: " + documentId));
 
         final ProcessedDocument processedDocument = findProcessedDocumentById(documentId);

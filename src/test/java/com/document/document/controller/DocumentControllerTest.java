@@ -96,4 +96,14 @@ class DocumentControllerTest {
         assertThat(result.getResponse().getContentAsString()).contains("File name cannot be greater than 255 characters");
     }
 
+    @Test
+    public void returnsOkWhenCalledForArbitraryDocumentID() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                        .get("/documents/1/count")
+                        .content(objectMapper.writeValueAsString(documentRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+    }
+
 }

@@ -30,8 +30,8 @@ public class DocumentController {
 
     @PostMapping("/documents")
     public ResponseEntity saveDocument(@Valid @RequestBody final DocumentRequest documentRequest) {
-        final Document document = documentService
-                .saveDocument(documentService.createDocumentFromRequest(documentRequest));
+        final Document document = documentService.saveDocument(documentRequest);
+
         publisher.sendMessage(new DocumentMessage(document.getId(), document.getFileContent()));
         return new ResponseEntity<>(HttpStatus.OK);
     }

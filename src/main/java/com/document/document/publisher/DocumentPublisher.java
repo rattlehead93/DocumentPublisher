@@ -25,10 +25,4 @@ public class DocumentPublisher {
     public void sendMessage(final DocumentMessage documentMessage) {
         rabbitTemplate.convertAndSend(exchange, routingKey, documentMessage);
     }
-
-//    @PostConstruct
-    public void test(){
-        DocumentMessage documentMessage = new DocumentMessage(1L, "abdcd");
-        sendMessage(documentMessage);
-    }
 }
