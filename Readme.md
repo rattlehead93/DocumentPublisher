@@ -1,5 +1,5 @@
 This project was done as a part of the coding challenge for PowerLedger. Its split into two spring-boot projects.
-`documents`  has the specified endpoints, while the one  named `documentConsumer` has the appropriate functionality of processing the documents.
+`DocumentPublisher` has the specified endpoints, while the one  named `DocumentConsumer` has the appropriate functionality of processing the documents.
 
 ## Requirements
 Requirements for running this project
@@ -9,12 +9,12 @@ Requirements for running this project
 
 ## Infrastructure
 
-To spin up the infrastructure for this project. First, cd into the `documents` folder.
+To spin up the infrastructure for this project. First, cd into the `DocumentPublisher` folder.
 run the command below
 
     docker-compose-up
 
-To perform the necessary migrations please cd into the  `documents` folder and run
+To perform the necessary migrations please cd into the  `DocumentPublisher` folder and run
 
     ./gradlew migrate
 This will create the required infrastructure for this project.
@@ -23,12 +23,12 @@ This will create the required infrastructure for this project.
 
 **The infrastructure has to be up in order to run this project.**
 To run the entire project we need to run two applications. 
-<p>First cd into the`documents` folder and run</p>
+<p>First cd into the `documents` folder and run</p>
 
     ./gradlew install
     ./gradlew bootRun 
 
-<p>then open up another terminal cd into the `documentConsumer` directory and run</p>
+<p>then open up another terminal cd into the `DocumentConsumer` directory and run</p>
 
     ./gradlew install
     ./gradlew bootRun
@@ -36,7 +36,7 @@ To run the entire project we need to run two applications.
 if everything ends with no system specific error then the user should be able to consume the `/document` and `document/{id}/count` apis using the URLS `localhost:8080/document` and `localhost:8080/document/{id}/count`
 
 ## Running tests
-Running the below command from the folders `document` and `documentConsumer` will run all the tests
+Running the below command from the folders `DocumentPublisher` and `DocumentConsumer` will run all the tests
 
     ./gradlew test
 
@@ -69,8 +69,8 @@ In this application the workflow works like below
   `document` table. Before saving the file content, some validations are done on the extension, file content and file name. Relevant code can be traced from `DocumentController.java`.
 - Then a message is published a rabbitmq queue to  publish the
   documents content and the saved document's id. Code in `DocumentService.java` and `DocumentPublisher.java`.
-- This message is consumed in the `documentConsumer`. The consumer
+- This message is consumed in the `DocumentConsumer`. The consumer
   then calculates the number of unique substrings from the message
-  and saves it in the `processed_document` table along with the unique substring count. Relevant code in `documentConsumer` repo's `RabbitMQListener.java`  and `DocumentProcessingService.java`.
+  and saves it in the `processed_document` table along with the unique substring count. Relevant code in `DocumentConsumer` repo's `RabbitMQListener.java`  and `DocumentProcessingService.java`.
 - If for some reason the consumer fails to save the processed document relevant data is stored into the `failed_document` table. Code in `DocumentProcessingService.java`
 - A scheduled task runs every 60 minutes to check the failed document table and tries to process them again. Related code in `FailedDocumentProcessingService.java`.
