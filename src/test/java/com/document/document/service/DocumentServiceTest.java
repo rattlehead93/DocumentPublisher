@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class DocumentServiceTest {
+
     @Mock
     DocumentRepository documentRepository;
 
